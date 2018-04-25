@@ -17,5 +17,4 @@ WORKDIR /usr/local/tomcat/webapps
 ARG version=2.0.0
 RUN rm -rf ROOT
 COPY --from=build /src/incubator-dubbo-ops/dubbo-admin/target/dubbo-admin-${version}.war .
-RUN mv dubbo-admin-${version}.war ROOT.war \
-    && rm dubbo-admin-${version}.war
+RUN mv dubbo-admin-${version}.war ROOT.war
