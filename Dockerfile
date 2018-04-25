@@ -8,7 +8,11 @@ RUN apk add --no-cache git \
 
 # timezone    
 RUN apk add -U tzdata \
+    && apk add -U zip \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+RUN mkdir /app \
+    && unzip /src/incubator-dubbo-ops/dubbo-admin/target/dubbo-admin-${version}.war -d /app
 
 FROM tomcat:9-jre8-alpine
 # timezone
@@ -16,6 +20,4 @@ COPY --from=build /etc/localtime /etc/localtime
 ARG version=2.0.0
 WORKDIR /usr/local/tomcat/webapps
 RUN rm -rf ROOT
-COPY --from=build /src/incubator-dubbo-ops/dubbo-admin/target/dubbo-admin-${version}.war .
-RUN unzip dubbo-admin-${version}.war -d webapps/ROOT \
-    && rm dubbo-admin-${version}.war
+COPY --from=build /app/* .
